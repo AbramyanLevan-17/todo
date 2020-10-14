@@ -54,9 +54,13 @@ const createTask = (text)=>{
     const checkBox = document.createElement('INPUT');
     checkBox.setAttribute('type','checkbox');
     newTask.appendChild(checkBox);
-    const textSpan = document.createElement('span');
-    textSpan.textContent = text;
-    newTask.appendChild(textSpan);
+    const editSubmit = document.createElement('form');
+   
+    const textSpan = document.createElement('INPUT');
+    textSpan.classList.add('edit')
+    textSpan.value = text;
+    editSubmit.appendChild(textSpan);
+    newTask.appendChild(editSubmit);
     const closeButton = document.createElement('INPUT');
     closeButton.setAttribute('type','button');
     closeButton.value = 'x'
@@ -72,6 +76,7 @@ const createTask = (text)=>{
     localStorage.setItem('todos', JSON.stringify(arrayList));
     handlerDeleteTodo(closeButton,todo.id);
     handlerCheckTodo(checkBox,todo.id);
+    submitEdit(editSubmit,todo.id);
     empty();
     setCounterUnch();
     setCounter();
@@ -129,6 +134,21 @@ const handlerCheckTodo = (element,id) => {
   setCounterUnch();
   setCounter();
 })
+}
+// edit todo 
+
+const submitEdit = (element,id) =>{
+    element.addEventListener('submit',evt=>{
+      evt.preventDefault();
+      for (const todo of arrayList){
+        if(id === todo.id){
+          todo.text = element.value;
+        }
+        
+      }
+      localStorage.setItem('todos',JSON.stringify(arrayList));
+    })
+
 }
 
 getTodos();

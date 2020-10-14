@@ -72,7 +72,11 @@ header span {
 .task input[type=button]:hover{
  color: red;
 }
-.task-checked span{
+.edit {
+  outline: none;
+  border: none;
+}
+.task-checked .edit{
   text-decoration: line-through;
   color: green;
 }

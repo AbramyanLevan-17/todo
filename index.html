@@ -13,6 +13,9 @@
   <div class="container">
       <div class="unchecked">
         <p class="title">To do: <span class="count count-unchecked"></span></p>
+        <div id="unchecked-progress">
+          <div id="unchecked-bar"></div>
+        </div>
         <form action="" class="add-task" required>
         <input class='add-task-input' autofocus type="text" placeholder="Enter a new task"/>
       </form>
@@ -23,6 +26,9 @@
       </div>
       <div class="checked">
         <p class="title">Done: <span class="count count-checked">1</span></p>
+        <div id="checked-progress">
+          <div id="checked-bar"></div>
+        </div>
         <p class="empty">You Haven't Done Anything</p>
         <ul class="list list-checked">
         </ul>

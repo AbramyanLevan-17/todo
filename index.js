@@ -1,11 +1,41 @@
-let addTask = document.querySelector('.add-task');
-let todoList = document.querySelector('.list-uchecked');
-let todoListChecked = document.querySelector('.list-checked')
+const addTask = document.querySelector('.add-task');
+const todoList = document.querySelector('.list-uchecked');
+const todoListChecked = document.querySelector('.list-checked')
 let arrayList = [];
 const emptyUnch = document.querySelector('.unchecked .empty');
+const uncheckedBar = document.getElementById('unchecked-bar');
+const checkedBar = document.getElementById('checked-bar');
+const progressAmount = 10;
 
 
 
+// set unchecked bar 
+const setUncheckedBar = () =>{
+  
+  let count = arrayList.filter(todo=>{
+    return todo.status === false;
+  });
+  if(count.length){
+    let amount = count.length * progressAmount;
+    uncheckedBar.style.width = amount + '%';
+    uncheckedBar.classList.remove('hidden')
+  }else{
+    uncheckedBar.classList.add('hidden');
+  }
+  
+}
+const setCheckedBar = () =>{
+  let count = arrayList.filter(todo=>{
+    return todo.status === true;
+  });
+  if(count.length){
+    let amount = count.length * progressAmount;
+    checkedBar.style.width = amount + '%';
+    checkedBar.classList.remove('hidden')
+  }else{
+    checkedBar.classList.add('hidden');
+  }
+}
 
 // set counter unchecked
 const setCounterUnch = () =>{
@@ -41,6 +71,8 @@ const getTodos = () => {
       }
     
         empty();
+        setUncheckedBar();
+        setCheckedBar();
         setCounterUnch();
         setCounter();
 }
@@ -76,10 +108,11 @@ const createTask = (text)=>{
     localStorage.setItem('todos', JSON.stringify(arrayList));
     handlerDeleteTodo(closeButton,todo.id);
     handlerCheckTodo(checkBox,todo.id);
-    submitEdit(editSubmit,todo.id);
     empty();
     setCounterUnch();
     setCounter();
+    setUncheckedBar();
+    setCheckedBar();
 
 
 }
@@ -102,6 +135,8 @@ const handlerDeleteTodo = (element,id) => {
     empty();
     setCounterUnch();
     setCounter();
+    setUncheckedBar();
+    setCheckedBar();
   })
 
 }
@@ -133,23 +168,12 @@ const handlerCheckTodo = (element,id) => {
   }
   setCounterUnch();
   setCounter();
+  setUncheckedBar();
+  setCheckedBar();
 })
 }
-// edit todo 
 
-const submitEdit = (element,id) =>{
-    element.addEventListener('submit',evt=>{
-      evt.preventDefault();
-      for (const todo of arrayList){
-        if(id === todo.id){
-          todo.text = element.value;
-        }
-        
-      }
-      localStorage.setItem('todos',JSON.stringify(arrayList));
-    })
 
-}
 
 getTodos();
 

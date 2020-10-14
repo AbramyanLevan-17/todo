@@ -103,6 +103,30 @@ header span {
 .hidden{
   display: none;
 }
+#unchecked-progress {
+  width: 100%;
+  background-color: white;
+  border: 1px solid #777;
+  margin-bottom: 3%;
+}
+#unchecked-bar {
+  width: 0%;
+  max-width: 100%;
+  height: 10px;
+  background-color: #b9ecb5;
+}
+#checked-progress {
+  width: 100%;
+  background-color: white;
+  border: 1px solid #777;
+  margin-bottom: 3%;
+}
+#checked-bar {
+  width: 0%;
+  max-width: 100%;
+  height: 10px;
+  background-color: #5491c8;
+}
 
 
 /* Media for flexible  */

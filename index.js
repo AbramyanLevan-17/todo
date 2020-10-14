@@ -81,7 +81,6 @@ const createTask = (text,status)=>{
 
     const newTask = document.createElement('li');
     newTask.classList.add('task');
-    newTask.setAttribute('key',Date.now())
     const checkBox = document.createElement('INPUT');
     checkBox.setAttribute('type','checkbox');
     newTask.appendChild(checkBox);
@@ -95,7 +94,7 @@ const createTask = (text,status)=>{
     newTask.appendChild(closeButton);
     todoList.appendChild(newTask);
     let todo = {
-      id: Date.now(),
+      id: Math.random(),
       text: text,
       status: status,
     }

@@ -72,12 +72,14 @@ header span {
 .task input[type=button]:hover{
  color: red;
 }
+.task span{
+  overflow: hidden;
+}
 .edit {
   outline: none;
   border: none;
 }
 .task-checked .edit{
-  text-decoration: line-through;
   color: green;
 }
 .count {
@@ -126,6 +128,9 @@ header span {
   max-width: 100%;
   height: 10px;
   background-color: #5491c8;
+}
+.edit-input{
+  
 }
 
 

@@ -66,10 +66,9 @@ const getTodos = () => {
     const data = JSON.parse(localStorage.getItem('todos'));
       if(data){
         for (const elem of data){
-           createTask(elem.text)
+           createTask(elem.text,elem.status)
         }
       }
-    
         empty();
         setUncheckedBar();
         setCheckedBar();
@@ -78,7 +77,7 @@ const getTodos = () => {
 }
 
 // Add a new task
-const createTask = (text)=>{
+const createTask = (text,status)=>{
 
     const newTask = document.createElement('li');
     newTask.classList.add('task');
@@ -86,13 +85,10 @@ const createTask = (text)=>{
     const checkBox = document.createElement('INPUT');
     checkBox.setAttribute('type','checkbox');
     newTask.appendChild(checkBox);
-    const editSubmit = document.createElement('form');
-   
-    const textSpan = document.createElement('INPUT');
+    const textSpan = document.createElement('span');
     textSpan.classList.add('edit')
-    textSpan.value = text;
-    editSubmit.appendChild(textSpan);
-    newTask.appendChild(editSubmit);
+    textSpan.textContent = text;
+    newTask.appendChild(textSpan);
     const closeButton = document.createElement('INPUT');
     closeButton.setAttribute('type','button');
     closeButton.value = 'x'
@@ -101,13 +97,14 @@ const createTask = (text)=>{
     let todo = {
       id: Date.now(),
       text: text,
-      status: false,
+      status: status,
     }
     arrayList = [...arrayList,todo]
     addTask.querySelector('input').value = '';
     localStorage.setItem('todos', JSON.stringify(arrayList));
     handlerDeleteTodo(closeButton,todo.id);
-    handlerCheckTodo(checkBox,todo.id);
+    handlerCheckTodo(checkBox,todo.id,todo.status);
+    handlerEdit(textSpan,todo.id)
     empty();
     setCounterUnch();
     setCounter();
@@ -120,7 +117,7 @@ const createTask = (text)=>{
 
 addTask.addEventListener('submit',(evt)=>{
   evt.preventDefault();
-  createTask(addTask.querySelector('input').value);
+  createTask(addTask.querySelector('input').value,false);
  
 })
 
@@ -141,7 +138,21 @@ const handlerDeleteTodo = (element,id) => {
 
 }
 // Check Todo
-const handlerCheckTodo = (element,id) => {
+const handlerCheckTodo = (element,id,status) => {
+  if(status === true){
+    element.checked = true;
+    for (const todo of arrayList){
+      if(id === todo.id){
+        todo.status = true;
+        if(todo.status === true){
+          element.parentElement.classList.add('task-checked');
+          element.parentElement.remove();
+          todoListChecked.appendChild(element.parentElement)
+        }
+      }
+    }
+    localStorage.setItem('todos',JSON.stringify(arrayList));
+  }
   element.addEventListener('change',()=>{
   if(element.checked){
     for (const todo of arrayList){
@@ -173,6 +184,28 @@ const handlerCheckTodo = (element,id) => {
 })
 }
 
+// edit task
+const handlerEdit = (element,id)=>{
+    element.addEventListener('dblclick',()=>{
+      
+      const editInput = document.createElement('input');
+      editInput.classList.add('edit-input')
+      editInput.value = element.textContent;
+      console.log('dblclick')
+        element.parentElement.replaceChild(editInput, element);
+      let temple = document.querySelector('.edit-input');
+        temple.addEventListener('change',()=>{
+          for(const todo of arrayList){
+            if(todo.id === id){
+              todo.text = temple.value;
+            }
+          }
+          localStorage.setItem('todos',JSON.stringify(arrayList));
+          temple.parentElement.replaceChild(element, temple);
+          element.textContent = temple.value
+        })
+    })
+}
 
 
 getTodos();

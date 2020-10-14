@@ -1,6 +1,6 @@
-function onPageLoaded() {
 let addTask = document.querySelector('.add-task');
 let todoList = document.querySelector('.list-uchecked');
+let arrayList = [];
 const emptyUnch = document.querySelector('.unchecked .empty')
 
 
@@ -14,25 +14,24 @@ const empty = () => {
     emptyUnch.classList.remove('hidden')
   }
 }
-// Add a new task
-const getTodos = () => {
-  const data = localStorage.getItem("todos");
 
-        if (data) {
-            todoList.innerHTML = data;
+//local storage
+const getTodos = () => {
+    const data = JSON.parse(localStorage.getItem('todos'));
+      if(data){
+        for (const elem of data){
+           createTask(elem.text)
         }
-        console.log(todoList)
-        const deleteButtons = todoList.querySelectorAll("input[type=button]");
-        for (const button of deleteButtons) {
-          handlerDeleteTodo(button);
-        }
+      }
         empty();
-       
 }
+
+// Add a new task
 const createTask = (text)=>{
 
     const newTask = document.createElement('li');
     newTask.classList.add('task');
+    newTask.setAttribute('key',Date.now())
     const checkBox = document.createElement('INPUT');
     checkBox.setAttribute('type','checkbox');
     newTask.appendChild(checkBox);
@@ -41,14 +40,21 @@ const createTask = (text)=>{
     newTask.appendChild(textSpan);
     const closeButton = document.createElement('INPUT');
     closeButton.setAttribute('type','button');
-    closeButton.value = 'X'
+    closeButton.value = 'x'
     newTask.appendChild(closeButton);
     todoList.appendChild(newTask);
+    let todo = {
+      id: Date.now(),
+      text: text,
+      status: false,
+    }
+    arrayList = [...arrayList,todo]
     addTask.querySelector('input').value = '';
-    localStorage.setItem('todos', todoList.innerHTML);
-    handlerDeleteTodo(closeButton);
-    handlerCheckTodo(checkBox);
+    localStorage.setItem('todos', JSON.stringify(arrayList));
+    handlerDeleteTodo(closeButton,todo.id);
+    handlerCheckTodo(checkBox,todo.id);
     empty();
+
 }
 
 
@@ -59,30 +65,43 @@ addTask.addEventListener('submit',(evt)=>{
 })
 
 // Delete Todo
-const handlerDeleteTodo = (element) => {
+const handlerDeleteTodo = (element,id) => {
   element.addEventListener('click',()=>{
     element.parentElement.remove();
-    console.log(todoList);
+    arrayList = arrayList.filter((todo)=>{
+      return todo.id !== id;
+    })
+    localStorage.setItem('todos',JSON.stringify(arrayList));
     empty();
   })
 
 }
 // Check Todo
-const handlerCheckTodo = (element) => {
+const handlerCheckTodo = (element,id) => {
   element.addEventListener('change',()=>{
-    if(element.checked){
-      element.parentElement.classList.add('task-checked');
-    }else{
-      element.parentElement.classList.remove('task-checked');
+  if(element.checked){
+    for (const todo of arrayList){
+      if(id === todo.id){
+        todo.status = true;
+        if(todo.status === true){
+          element.parentElement.classList.add('task-checked')
+        }
+      }
     }
-   
-  })
+    localStorage.setItem('todos',JSON.stringify(arrayList));
+  }else{
+     for (const todo of arrayList){
+      if(id === todo.id){
+        todo.status = false;
+          element.parentElement.classList.remove('task-checked')
+      }
+    }
+    localStorage.setItem('todos',JSON.stringify(arrayList));
+  }
+})
 }
+
 getTodos();
-}
-
-document.addEventListener("DOMContentLoaded", onPageLoaded);
-
 
 
 

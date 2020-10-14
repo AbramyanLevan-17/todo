@@ -72,8 +72,9 @@ header span {
 .task input[type=button]:hover{
  color: red;
 }
-.task-checked{
+.task-checked span{
   text-decoration: line-through;
+  color: green;
 }
 .count {
   font-size: 20px;
@@ -92,12 +93,13 @@ header span {
 .add-task-input{
   flex-grow: 1;
   padding: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   outline: none ;
 }
 .hidden{
   display: none;
 }
+
 
 /* Media for flexible  */
 @media only screen and (max-width: 600px) {

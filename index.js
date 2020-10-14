@@ -66,7 +66,7 @@ const getTodos = () => {
     const data = JSON.parse(localStorage.getItem('todos'));
       if(data){
         for (const elem of data){
-           createTask(elem.text,elem.status)
+           createTask(elem.text,elem.status,elem.id)
         }
       }
         empty();
@@ -77,7 +77,7 @@ const getTodos = () => {
 }
 
 // Add a new task
-const createTask = (text,status)=>{
+const createTask = (text,status,id)=>{
 
     const newTask = document.createElement('li');
     newTask.classList.add('task');
@@ -94,7 +94,7 @@ const createTask = (text,status)=>{
     newTask.appendChild(closeButton);
     todoList.appendChild(newTask);
     let todo = {
-      id: Math.random(),
+      id: id,
       text: text,
       status: status,
     }
@@ -116,7 +116,7 @@ const createTask = (text,status)=>{
 
 addTask.addEventListener('submit',(evt)=>{
   evt.preventDefault();
-  createTask(addTask.querySelector('input').value,false);
+  createTask(addTask.querySelector('input').value,false,Date.now());
  
 })
 

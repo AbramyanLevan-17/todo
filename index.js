@@ -1,11 +1,27 @@
 let addTask = document.querySelector('.add-task');
 let todoList = document.querySelector('.list-uchecked');
+let todoListChecked = document.querySelector('.list-checked')
 let arrayList = [];
-const emptyUnch = document.querySelector('.unchecked .empty')
+const emptyUnch = document.querySelector('.unchecked .empty');
 
 
 
 
+// set counter unchecked
+const setCounterUnch = () =>{
+  let count = arrayList.filter(todo=>{
+    return todo.status === false;
+  });
+  document.querySelector('.count-unchecked').textContent = count.length;
+}
+
+// set counter checked
+const setCounter = () =>{
+  let count = arrayList.filter(todo=>{
+    return todo.status === true;
+  });
+  document.querySelector('.count-checked').textContent = count.length;
+}
 //check empty
 const empty = () => {
   if(todoList.children.length){
@@ -23,7 +39,10 @@ const getTodos = () => {
            createTask(elem.text)
         }
       }
+    
         empty();
+        setCounterUnch();
+        setCounter();
 }
 
 // Add a new task
@@ -54,6 +73,9 @@ const createTask = (text)=>{
     handlerDeleteTodo(closeButton,todo.id);
     handlerCheckTodo(checkBox,todo.id);
     empty();
+    setCounterUnch();
+    setCounter();
+
 
 }
 
@@ -73,6 +95,8 @@ const handlerDeleteTodo = (element,id) => {
     })
     localStorage.setItem('todos',JSON.stringify(arrayList));
     empty();
+    setCounterUnch();
+    setCounter();
   })
 
 }
@@ -84,7 +108,9 @@ const handlerCheckTodo = (element,id) => {
       if(id === todo.id){
         todo.status = true;
         if(todo.status === true){
-          element.parentElement.classList.add('task-checked')
+          element.parentElement.classList.add('task-checked');
+          element.parentElement.remove();
+          todoListChecked.appendChild(element.parentElement)
         }
       }
     }
@@ -94,10 +120,14 @@ const handlerCheckTodo = (element,id) => {
       if(id === todo.id){
         todo.status = false;
           element.parentElement.classList.remove('task-checked')
+          element.parentElement.remove();
+          todoList.appendChild(element.parentElement)
       }
     }
     localStorage.setItem('todos',JSON.stringify(arrayList));
   }
+  setCounterUnch();
+  setCounter();
 })
 }
 
